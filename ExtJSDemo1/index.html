@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>ExtJS4.2</title>
+    <meta charset="utf-8" />
+    <link href="Resources/ext-theme-neptune/ext-theme-neptune-all.css" rel="stylesheet" />
+    <script src="ExtJS4.2/ext-all.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // 示例一
+        /*Ext.onReady(function () {
+            Ext.create('Ext.panel.Panel', {
+                width: '100%',
+                title:'Test',
+                renderTo: Ext.getBody(),
+                items: [
+                    Ext.create('Ext.form.Display', {
+                        width: '100%',
+                        value: '第一个ExtJS程序'
+                    })
+                ]
+            });
+        });*/
+
+        // 示例二
+        Ext.application({
+            name: 'AKApp',
+            launch: function () {
+                // 设定Viewport
+                Ext.create('Ext.container.Viewport', {
+                    name: 'MainFrame',
+                    layout: 'border',
+                    items: [
+                        Ext.create('Ext.panel.Panel', { // header
+                            width: '100%',
+                            height: 50,
+                            bodyBorder: false,
+                            border: false,
+                            region: 'north',
+                            style: {
+                                background: '#739b2e'
+                            },
+                            html: '<div id="header_content">ExtJSDemo</div>'
+                        }),
+                        Ext.create('Ext.tree.Panel', { // menu
+                            title: '目录',
+                            id: 'app_tree',
+                            rootVisible: false,
+                            lines: false,
+                            split: true,
+                            width: '20%',
+                            region: 'west',
+                            root: {
+                                expanded: true,
+                                children: [
+                                    {
+                                        text: '业务',
+                                        expanded: true,
+                                        children: [
+                                            { text: '船舶管理', id: 'ShipMgr.ShipMgrP', leaf: true },
+                                        ]
+                                    },
+                                    {
+                                        text: 'Demo',
+                                        expanded: true,
+                                        children: [
+                                            { text: '创建组件', id: 'Demo.CreateCompareP', leaf: true },
+                                            { text: '查找组件', id: 'Demo.QueryCompareP', leaf: true },
+                                        ]
+                                    }
+                                ]
+                            },
+                            listeners: {
+                                select: function (thisView, thisControl) {
+                                    if (thisControl.data.leaf) {
+                                        // TODO：点击菜单，创建相关的Tab页
+                                        var tabId = thisControl.data.id;
+                                        // 1.设置tab页的默认参数
+                                        var tabConfig = {
+                                            closable: true,
+                                            title: thisControl.data.text,
+                                            id: tabId,
+                                            bodyBorder: false,
+                                            border: false,
+                                            icon: 'tab.png'
+                                        };
+
+                                        // 2.判断是否已存在此Tab，若存在就显示
+                                        var newTab = Ext.getCmp('app_tabContainer').getComponent(tabId);
+                                        if (!newTab) {
+                                            // 2.1 加载业务文件
+                                            var tabPath = 'app.' + tabId; // 界面路径 eg：app.ShipMgr.ShipMgrP
+                                            Ext.syncRequire(tabPath, function () {
+                                                newTab = Ext.create(tabId, tabConfig);
+                                                Ext.getCmp('app_tabContainer').add(newTab);
+                                                Ext.getCmp('app_tabContainer').setActiveTab(newTab);
+                                            });
+                                        } else {
+                                            // 2.2 已存在此业务的tab页就直接设置active
+                                            Ext.getCmp('app_tabContainer').setActiveTab(newTab);
+                                        }
+                                    }
+                                }
+                            }
+                        }),
+                        Ext.create('Ext.tab.Panel', { // tab
+                            id: 'app_tabContainer',
+                            region: 'center',
+                            autoScroll: true,
+                            /*defaults: {
+                                autoScroll: true,
+                                bodyPadding: 4,
+                                closable: true  //tab页的关闭按钮
+                            }*/
+                            listeners: {
+                                tabchange: function (thisControl, newCard, oldCard) {
+                                    var tabId = newCard.id;
+                                    // 1.选中菜单的节点
+                                    var node = Ext.getCmp('app_tree').store.getNodeById(tabId);
+                                    if (node) {
+                                        Ext.getCmp('app_tree').getSelectionModel().select(node);
+                                    } else {
+                                        Ext.getCmp('app_tree').getSelectionModel().select(0);
+                                    }
+
+                                    // 2.修改url
+                                    if (oldCard) {
+                                        history.pushState('', '', location.href.split('#')[0] + '#' + newCard.id);
+                                    }
+                                }
+                            }
+                        }),
+                    ]
+                });
+            }
+        });
+        // 示例三
+
+    </script>
+</head>
+<body>
+</body>
+</html>

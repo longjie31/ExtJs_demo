@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>ExtJS4.2</title>
+    <meta charset="utf-8" />
+    <link href="Resources/ext-theme-neptune/ext-theme-neptune-all.css" rel="stylesheet" />
+    <script src="ExtJS4.2/ext-all.js"></script>
+    <script src="app.js"></script>
+    <script>
+        Ext.define('App.ShipMgr.model.ShipModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'ShipId', type: 'string', remark: '船舶ID' },
+                { name: 'ShipName', type: 'string', remark: '船舶名称' },
+                { name: 'State', type: 'string', remark: '状态' },
+                { name: 'StateName', type: 'string', remark: '状态名称' },
+                { name: 'Tonnage', type: 'string', remark: '吨位' },
+                { name: 'LoadNumber', type: 'int', remark: '核载人数' },
+            ]
+        });
+        var shipMgrStore = Ext.create('Ext.data.Store', {
+            model: 'App.ShipMgr.model.ShipModel',
+            pageSize: 25,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '/Business/ShipMgr/Query',
+                reader: {
+                    reader: 'json',
+                    root: 'data',
+                    totalProperty: 'rowCount',
+                },
+                actionMethods: {
+                    create: 'Post'
+                }
+            }
+        });
+        // 创建grid
+        var shipMgrGrid = Ext.create('Ext.grid.Panel', {
+            store: shipMgrStore,
+            columnLines: true,
+            rowLines: true,
+            bbar: Ext.create('Ext.toolbar.Paging', {
+                store: shipMgrStore,
+                pageSize: 25,
+                displayInfo: true,
+                displayMsg: '当前显示第{0}行到第{1}行，一共{2}行。',
+                emptyMsg: '没有任何记录'
+            }),
+            columns: [
+                Ext.create('Ext.grid.RowNumberer', {
+                    text: '序号',
+                    width: 50
+                }), {
+                    text: '船舶名称',
+                    dataIndex: 'ShipName',
+                    flex:1
+                }, {
+                    text: '状态名称',
+                    dataIndex: 'StateName',
+                    width: 150
+                }, {
+                    text: '吨位',
+                    dataIndex: 'Tonnage',
+                    width: 150
+                }, {
+                    text: '核载人数',
+                    dataIndex: 'LoadNumber',
+                    width: 150
+                }
+            ]
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

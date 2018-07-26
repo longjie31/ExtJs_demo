@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <link href="Resources/ext-theme-neptune/ext-theme-neptune-all.css" rel="stylesheet" />
+    <script  src="ExtJS4.2/ext-all.js"></script>
+    <script >
+        Ext.onReady(function() {
+            Ext.create('Ext.Panel', {
+                renderTo: 'helloWorldPanel',
+                height: 100,
+                width: 200,
+                title: 'Hello world',
+                html: 'First Ext JS Hello World Program'
+            });
+        });
+       /* Ext.onReady(function () {
+            Ext.create('Ext.panel.Panel', {
+                width: '100%',
+                title:'Test',
+                renderTo: Ext.getBody(),
+                items: [
+                    Ext.create('Ext.form.Display', {
+                        width: '100%',
+                        value: '第一个ExtJS程序'
+                    })
+                ]
+            });
+        });*/
+    </script>
+</head>
+<body>
+<div id="helloWorldPanel"></div>
+</body>
+</html>
